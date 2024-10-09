@@ -1,0 +1,179 @@
+import random
+import string
+
+# Fungsi untuk generate key disamakan panjangnya dengan message
+def generate_key(message, key=None):
+    if key:
+        key = list(key)
+        if len(message) == len(key):
+            return "".join(key)
+        else:
+            for i in range(len(message) - len(key)):
+                key.append(key[i % len(key)])
+        return "".join(key)
+    else:
+        # Jika key tidak diberikan, generate key acak
+        return ''.join(random.choice(string.ascii_uppercase) for _ in range(len(message)))
+
+# Fungsi enkripsi Vigenère Cipher
+def encrypt_message(message, key):
+    encrypted_message = []
+    print("\nProses Enkripsi:")
+    for i in range(len(message)):
+        shift = (ord(message[i]) + ord(key[i])) % 26
+        encrypted_char = chr(shift + 65)  # 65 = 'A' dalam ASCII
+        encrypted_message.append(encrypted_char)
+        
+        print(f"Huruf Pesan: {message[i]} ({ord(message[i]) - 65}), Huruf Key: {key[i]} ({ord(key[i]) - 65})")
+        print(f"Shift: ({ord(message[i]) - 65} + {ord(key[i]) - 65}) % 26 = {shift}")
+        print(f"Huruf Terenkripsi: {encrypted_char}\n")
+    
+    return "".join(encrypted_message)
+
+# Fungsi dekripsi Vigenère Cipher
+def decrypt_message(encrypted_message, key):
+    decrypted_message = []
+    print("\nProses Dekripsi:")
+    for i in range(len(encrypted_message)):
+        shift = (ord(encrypted_message[i]) - ord(key[i]) + 26) % 26
+        decrypted_char = chr(shift + 65)
+        decrypted_message.append(decrypted_char)
+        
+        print(f"Huruf Terenkripsi: {encrypted_message[i]} ({ord(encrypted_message[i]) - 65}), Huruf Key: {key[i]} ({ord(key[i]) - 65})")
+        print(f"Shift: ({ord(encrypted_message[i]) - 65} - {ord(key[i]) - 65} + 26) % 26 = {shift}")
+        print(f"Huruf Asli: {decrypted_char}\n")
+    
+    return "".join(decrypted_message)
+
+def vigenere_cipher():
+    message = input("Masukkan pesan yang ingin dienkripsi: ").upper()
+    
+    key = input("Masukkan key (tekan Enter untuk generate key acak): ").upper()
+    
+    generated_key = generate_key(message, key if key else None)
+    
+    print(f"\nPesan Asli: {message}")
+    if key:
+        print(f"Key (dari user): {key}")
+    else:
+        print("Key tidak diberikan, generate key acak...")
+    print(f"key (acak): {generated_key}")
+    
+    encrypted_message = encrypt_message(message, generated_key)
+    
+    decrypted_message = decrypt_message(encrypted_message, generated_key)
+    
+    print(f"\nHasil Akhir:")
+    print(f"Pesan Asli: {message}")
+    print(f"Pesan Terenkripsi: {encrypted_message}")
+    print(f"Pesan Didekripsi: {decrypted_message}")    
+
+vigenere_cipher()
+
+
+# Output:
+"""
+Masukkan pesan yang ingin dienkripsi: KRIPTOGRAFI
+Masukkan key (tekan Enter untuk generate key acak): KEY
+
+Pesan Asli: KRIPTOGRAFI
+Key (dari user): KEY
+key (acak): KEYKEYKEYKE
+
+Proses Enkripsi:
+Huruf Pesan: K (10), Huruf Key: K (10)
+Shift: (10 + 10) % 26 = 20
+Huruf Terenkripsi: U
+
+Huruf Pesan: R (17), Huruf Key: E (4)
+Shift: (17 + 4) % 26 = 21
+Huruf Terenkripsi: V
+
+Huruf Pesan: I (8), Huruf Key: Y (24)
+Shift: (8 + 24) % 26 = 6
+Huruf Terenkripsi: G
+
+Huruf Pesan: P (15), Huruf Key: K (10)
+Shift: (15 + 10) % 26 = 25
+Huruf Terenkripsi: Z
+
+Huruf Pesan: T (19), Huruf Key: E (4)
+Shift: (19 + 4) % 26 = 23
+Huruf Terenkripsi: X
+
+Huruf Pesan: O (14), Huruf Key: Y (24)
+Shift: (14 + 24) % 26 = 12
+Huruf Terenkripsi: M
+
+Huruf Pesan: G (6), Huruf Key: K (10)
+Shift: (6 + 10) % 26 = 16
+Huruf Terenkripsi: Q
+
+Huruf Pesan: R (17), Huruf Key: E (4)
+Shift: (17 + 4) % 26 = 21
+Huruf Terenkripsi: V
+
+Huruf Pesan: A (0), Huruf Key: Y (24)
+Shift: (0 + 24) % 26 = 24
+Huruf Terenkripsi: Y
+
+Huruf Pesan: F (5), Huruf Key: K (10)
+Shift: (5 + 10) % 26 = 15
+Huruf Terenkripsi: P
+
+Huruf Pesan: I (8), Huruf Key: E (4)
+Shift: (8 + 4) % 26 = 12
+Huruf Terenkripsi: M
+
+
+Proses Dekripsi:
+Huruf Terenkripsi: U (20), Huruf Key: K (10)
+Shift: (20 - 10 + 26) % 26 = 10
+Huruf Asli: K
+
+Huruf Terenkripsi: V (21), Huruf Key: E (4)
+Shift: (21 - 4 + 26) % 26 = 17
+Huruf Asli: R
+
+Huruf Terenkripsi: G (6), Huruf Key: Y (24)
+Shift: (6 - 24 + 26) % 26 = 8
+Huruf Asli: I
+
+Huruf Terenkripsi: Z (25), Huruf Key: K (10)
+Shift: (25 - 10 + 26) % 26 = 15
+Huruf Asli: P
+
+Huruf Terenkripsi: X (23), Huruf Key: E (4)
+Shift: (23 - 4 + 26) % 26 = 19
+Huruf Asli: T
+
+Huruf Terenkripsi: M (12), Huruf Key: Y (24)
+Shift: (12 - 24 + 26) % 26 = 14
+Huruf Asli: O
+
+Huruf Terenkripsi: Q (16), Huruf Key: K (10)
+Shift: (16 - 10 + 26) % 26 = 6
+Huruf Asli: G
+
+Huruf Terenkripsi: V (21), Huruf Key: E (4)
+Shift: (21 - 4 + 26) % 26 = 17
+Huruf Asli: R
+
+Huruf Terenkripsi: Y (24), Huruf Key: Y (24)
+Shift: (24 - 24 + 26) % 26 = 0
+Huruf Asli: A
+
+Huruf Terenkripsi: P (15), Huruf Key: K (10)
+Shift: (15 - 10 + 26) % 26 = 5
+Huruf Asli: F
+
+Huruf Terenkripsi: M (12), Huruf Key: E (4)
+Shift: (12 - 4 + 26) % 26 = 8
+Huruf Asli: I
+
+
+Hasil Akhir:
+Pesan Asli: KRIPTOGRAFI
+Pesan Terenkripsi: UVGZXMQVYPM
+Pesan Didekripsi: KRIPTOGRAFI
+"""
