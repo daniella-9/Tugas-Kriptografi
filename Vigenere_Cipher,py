@@ -57,7 +57,7 @@ def vigenere_cipher():
         print(f"Key (dari user): {key}")
     else:
         print("Key tidak diberikan, generate key acak...")
-    print(f"key (acak): {generated_key}")
+    print(f"key Generated: {generated_key}")
     
     encrypted_message = encrypt_message(message, generated_key)
     
